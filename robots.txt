@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://icnc2026.org/sitemap.xml

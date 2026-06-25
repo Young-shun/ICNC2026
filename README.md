@@ -19,7 +19,19 @@ Connect this GitHub repository to Cloudflare Pages and use:
 - Build command: `npm run build`
 - Build output directory: `.`
 
-The repository includes `wrangler.toml`, `_headers`, and `_redirects`, so Cloudflare Pages can deploy the static files directly.
+The repository includes `wrangler.toml`, `_headers`, `_redirects`, `robots.txt`, and `sitemap.xml`, so Cloudflare Pages can deploy the static files directly.
+
+## Production Domain
+
+The production domain is:
+
+```text
+https://icnc2026.org/
+```
+
+In Cloudflare Pages, open the `icnc2026` project and add `icnc2026.org` under Custom domains. Because the domain is already on Cloudflare, Pages can create the required DNS record automatically.
+
+Optionally add `www.icnc2026.org` and redirect it to `https://icnc2026.org/`.
 
 ## Deploy with Wrangler
 
