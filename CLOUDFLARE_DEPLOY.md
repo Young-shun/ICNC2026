@@ -5,9 +5,23 @@ This project is a static site. It does not require a build step.
 ## Pages Build Settings
 
 - Framework preset: None
-- Build command: leave empty
+- Build command: leave empty, or use `npm run build`
 - Build output directory: `.`
 - Root directory: `/`
+
+Do not use `wrangler deploy` in the Pages build command. That command deploys a Worker and will fail for this static Pages project with:
+
+```text
+Missing entry-point to Worker script or to assets directory
+```
+
+If you deploy from your local machine instead of GitHub integration, use:
+
+```powershell
+npm run deploy
+```
+
+That script runs `wrangler pages deploy . --project-name icnc2026`.
 
 ## Custom Domain
 

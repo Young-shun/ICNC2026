@@ -16,10 +16,12 @@ npm run dev
 Connect this GitHub repository to Cloudflare Pages and use:
 
 - Framework preset: `None`
-- Build command: `npm run build`
+- Build command: leave empty, or use `npm run build`
 - Build output directory: `.`
 
 The repository includes `wrangler.toml`, `_headers`, `_redirects`, `robots.txt`, and `sitemap.xml`, so Cloudflare Pages can deploy the static files directly.
+
+Do not set the Cloudflare Pages build command to `wrangler deploy`. That is the Workers deploy command. If you see `Missing entry-point to Worker script or to assets directory`, change the Pages build command back to blank or `npm run build`.
 
 ## Production Domain
 
@@ -39,3 +41,5 @@ Optionally add `www.icnc2026.org` and redirect it to `https://icnc2026.org/`.
 npm install
 npm run deploy
 ```
+
+This runs `wrangler pages deploy`, not `wrangler deploy`.
