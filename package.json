@@ -1,0 +1,14 @@
+{
+  "name": "icnc2026",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Static website for the 2026 International Conference on Neuromorphic Computing.",
+  "scripts": {
+    "build": "node scripts/verify-site.mjs",
+    "dev": "npx wrangler pages dev .",
+    "deploy": "npx wrangler pages deploy . --project-name icnc2026"
+  },
+  "devDependencies": {
+    "wrangler": "^4.22.0"
+  }
+}
