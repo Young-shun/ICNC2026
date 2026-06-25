@@ -1,8 +1,9 @@
-import { access, readFile, readdir } from "node:fs/promises";
-import path from "node:path";
+import { existsSync, readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 
-const root = process.cwd();
-const requiredFiles = [
+const root = dirname(dirname(fileURLToPath(import.meta.url)));
+const pages = [
   "index.html",
   "committee.html",
   "call-for-papers.html",
@@ -10,28 +11,31 @@ const requiredFiles = [
   "publication.html",
   "program.html",
   "contact.html",
-  "styles.css",
-  "script.js",
-  "_headers",
-  "_redirects",
-  "wrangler.toml"
 ];
 
-for (const file of requiredFiles) {
-  await access(path.join(root, file));
+const requiredFiles = [...pages, "styles.css", "script.js", "_headers", "_redirects", "wrangler.toml"];
+const missing = requiredFiles.filter((file) => !existsSync(join(root, file)));
+
+if (missing.length > 0) {
+  throw new Error(`Missing required files: ${missing.join(", ")}`);
 }
 
-const files = await readdir(root);
-const htmlFiles = files.filter((file) => file.endsWith(".html"));
+const linkPattern = /href="([^"]+\.html)"/g;
+const brokenLinks = [];
 
-for (const file of htmlFiles) {
-  const content = await readFile(path.join(root, file), "utf8");
-  if (!content.includes('href="styles.css"')) {
-    throw new Error(`${file} does not reference styles.css`);
-  }
-  if (!content.includes('src="script.js"')) {
-    throw new Error(`${file} does not reference script.js`);
+for (const page of pages) {
+  const html = readFileSync(join(root, page), "utf8");
+  const matches = [...html.matchAll(linkPattern)].map((match) => match[1]);
+
+  for (const href of matches) {
+    if (!existsSync(join(root, href))) {
+      brokenLinks.push(`${page} -> ${href}`);
+    }
   }
 }
 
-console.log(`Verified ${requiredFiles.length} required files and ${htmlFiles.length} HTML pages.`);
+if (brokenLinks.length > 0) {
+  throw new Error(`Broken internal links:\n${brokenLinks.join("\n")}`);
+}
+
+console.log("Cloudflare Pages static site verification passed.");
